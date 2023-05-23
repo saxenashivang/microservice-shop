@@ -22,7 +22,7 @@ class UserRepository {
     
     async FindUser({ email }){
         try{
-            const existingUser = await UserModel.findOne({ email: email });
+            const existingUser = await UserModel.findOne({ email: email.email });
             return existingUser;
         }catch(err){
             throw APIError('API Error', STATUS_CODES.INTERNAL_ERROR, 'Unable to Find User')

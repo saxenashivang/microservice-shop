@@ -37,8 +37,8 @@ module.exports = (app) => {
     app.get('/profile', UserAuth ,async (req,res,next) => {
 
         try {
-            const { _id } = req.user;
-            const { data } = await service.GetProfile({ _id });
+            const { email } = req.user;
+            const { data } = await service.GetProfile({ email });
             return res.json(data);
             
         } catch (err) {

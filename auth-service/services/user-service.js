@@ -60,10 +60,10 @@ class UserService {
     }
 
 
-    async GetProfile(id){
-
+    async GetProfile(email){
+  console.log("email",email);
         try {
-            const existingUser = await this.repository.FindUserById({id});
+            const existingUser = await this.repository.FindUser({email});
             return FormateData(existingUser);
             
         } catch (err) {
