@@ -26,7 +26,7 @@ class AppError extends Error {
   }
 }
 
-// api Specific Errors
+//api Specific Errors
 class APIError extends AppError {
   constructor(
     name,
@@ -38,7 +38,7 @@ class APIError extends AppError {
   }
 }
 
-// 400
+//400
 class BadRequestError extends AppError {
   constructor(description = "Bad request", logingErrorResponse) {
     super(
@@ -52,7 +52,7 @@ class BadRequestError extends AppError {
   }
 }
 
-// 400
+//400
 class ValidationError extends AppError {
   constructor(description = "Validation Error", errorStack) {
     super(
@@ -65,7 +65,7 @@ class ValidationError extends AppError {
   }
 }
 
-export default {
+module.exports = {
   AppError,
   APIError,
   BadRequestError,

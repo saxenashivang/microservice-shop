@@ -6,7 +6,7 @@ const config = {
   },
   default: {
     SECRET: "mysecretkey",
-    DATABASE: "mongodb://localhost:27017/Products",
+    DATABASE: "mongodb://localhost:27017/users",
     RABBITMQ_URL: "amqp://localhost:5672",
   },
 };

@@ -1,5 +1,5 @@
 const { ProductModel } = require("../models");
-const { APIError, STATUS_CODES } = require("../../utils/app-errors").default;
+const { APIError, STATUS_CODES } = require("../../utils/app-errors");
 
 // Dealing with data base operations
 class ProductRepository {
@@ -36,9 +36,9 @@ class ProductRepository {
     }
   }
 
-  async FindProductById({ id }) {
+  async FindProductById(_id) {
     try {
-      const existingProduct = await ProductModel.findById(id);
+      const existingProduct = await ProductModel.findById(_id);
 
       return existingProduct;
     } catch (err) {

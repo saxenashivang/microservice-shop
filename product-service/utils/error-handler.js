@@ -10,7 +10,6 @@ const LogErrors = createLogger({
 
 class ErrorLogger {
   constructor() {}
-
   async logError(err) {
     console.log("==================== Start Error Logger ===============");
     LogErrors.log({
@@ -27,15 +26,16 @@ class ErrorLogger {
   isTrustError(error) {
     if (error instanceof AppError) {
       return error.isOperational;
+    } else {
+      return false;
     }
-    return false;
   }
 }
 
 const ErrorHandler = async (err, req, res, next) => {
   const errorLogger = new ErrorLogger();
 
-  process.on("uncaughtException", (reason, promise) => {
+  process.on("uncaughtException", (reason) => {
     console.log(reason, "UNHANDLED");
     throw reason; // need to take care
   });
@@ -43,7 +43,7 @@ const ErrorHandler = async (err, req, res, next) => {
   process.on("uncaughtException", (error) => {
     errorLogger.logError(error);
     if (errorLogger.isTrustError(err)) {
-      // process exist // need restart
+      //process exist // need restart
     }
   });
 
@@ -58,9 +58,9 @@ const ErrorHandler = async (err, req, res, next) => {
         return res.status(err.statusCode).json({ message: errorDescription });
       }
       return res.status(err.statusCode).json({ message: err.message });
+    } else {
+      //process exit // terriablly wrong with flow need restart
     }
-    // process exit // terriablly wrong with flow need restart
-
     return res.status(err.statusCode).json({ message: err.message });
   }
   next();

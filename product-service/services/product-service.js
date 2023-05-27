@@ -1,6 +1,6 @@
 const { ProductRepository } = require("../database");
 const { FormateData } = require("../utils");
-const { APIError, BadRequestError } = require("../utils/app-errors").default;
+const { APIError, BadRequestError } = require('../utils/app-errors')
 
 // All Business logic will be here
 class ProductService {
@@ -26,11 +26,9 @@ class ProductService {
     }
   }
 
-  async GetProduct(userInputs) {
-    const { _id } = userInputs;
-
+  async GetProduct(_id) {
     try {
-      const result = await this.repository.FindProductById({ _id });
+      const result = await this.repository.FindProductById(_id);
 
       return FormateData(result);
     } catch (err) {
