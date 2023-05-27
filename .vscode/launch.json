@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/product-service/index.js"
+            "program": "${workspaceFolder}/cart-service/index.js"
         }
     ]
 }

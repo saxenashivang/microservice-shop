@@ -40,7 +40,7 @@ const StartServer = async () => {
     })
     .on("error", (err) => {
       console.log(err);
-      process.exit();
+      throw new Error("Unable to start server");
     });
 };
 

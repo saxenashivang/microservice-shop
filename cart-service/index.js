@@ -1,48 +1,41 @@
-const express = require('express');
-const Order = require('./order.model.js');
-const amqp = require('amqplib');
+const express = require("express");
+const amqp = require("amqplib");
+const { UserModel } = require("./database/models");
+const { databaseConnection } = require("./database");
 
 let channel;
 
-async function createOrder(products, userEmail) {
-  let total = 0;
-  for (let t = 0; t < products.length; ++t) {
-    total += +products[t].price;
-  }
+async function createOrder(product, userEmail) {
+  let user;
+  user = await UserModel.find({ email: userEmail });
+  console.log(user);
+  // productInfo = await Productmodel.findById({id: product});
+  // console.log(product)
 
-  products = products.map(product => {
-    return product.id;
-  });
-
-  const newOrder = await Order.create({
-    products,
-    creator: userEmail,
-    totalPrice: total,
-  });
-
-  return newOrder;
+  return user;
 }
 
 async function connect() {
+  await databaseConnection();
   const amqpServer = process.env.RABBITMQ_URL;
   const connection = await amqp.connect(amqpServer);
   channel = await connection.createChannel();
-  await channel.assertQueue('ORDER');
+  await channel.assertQueue("ORDER");
 }
 
 connect().then(() => {
-  channel.consume('ORDER', data => {
-    console.log('Consuming ORDER service');
-    const { products, userEmail } = JSON.parse(data.content);
-    createOrder(products, userEmail)
-      .then(newOrder => {
+  channel.consume("ORDER", (data) => {
+    console.log("Consuming ORDER service");
+    const { product, userEmail } = JSON.parse(data.content);
+    createOrder(product, userEmail)
+      .then((newOrder) => {
         channel.ack(data);
         channel.sendToQueue(
-          'PRODUCT',
+          "PRODUCT",
           Buffer.from(JSON.stringify({ newOrder }))
         );
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   });
@@ -57,11 +50,3 @@ const port = process.env.PORT ?? 3000;
 app.listen(port, () => {
   console.log(`Orders Service at ${port}`);
 });
-
-app.get('/orders', async (req, res) => {
-  const results = await Order.findAll();
-
-  res.status(200).json(results);
-});
-
-sequelize.sync();
