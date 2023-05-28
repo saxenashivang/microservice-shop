@@ -3,13 +3,13 @@ const { APIError, STATUS_CODES } = require("../../utils/app-errors");
 
 // Dealing with data base operations
 class ProductRepository {
-  async CreateProduct({ name, price, description, imageURL, creator }) {
+  async CreateProduct({ name, price, description, imageURI, creator }) {
     try {
       const Product = new ProductModel({
         name,
         price,
         description,
-        imageURL,
+        imageURI,
         creator,
       });
       const ProductResult = await Product.save();

@@ -33,7 +33,7 @@ const StartServer = async () => {
   });
 
   // listening port
-  const PORT = process.env.PORT || 3002;
+  const PORT = process.env.PORT || 8003;
   app
     .listen(PORT, () => {
       console.log(`app is live at ${PORT}`);

@@ -4,10 +4,10 @@ import Head from 'next/head';
 // form
 import { useForm } from 'react-hook-form';
 // @mui
-import { Container, Typography, Stack,Box,Card,Skeleton } from '@mui/material';
+import { Container, Typography, Stack,Box,Card,Skeleton, Grid } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProducts } from '../../redux/slices/product';
+import { getProducts,deleteCart,increaseQuantity,decreaseQuantity } from '../../redux/slices/product';
 // routes
 import { PATH_SHOP } from '../../routes/paths';
 
@@ -15,6 +15,7 @@ import { PATH_SHOP } from '../../routes/paths';
 import MainLayout from '../../layouts/main';
 import ProductCard from '../../components/ProductCard';
 import CartWidget from '../../components/CartWidget';
+import CheckoutCart from '../../components/CheckoutCart';
 
 
 // ----------------------------------------------------------------------
@@ -31,39 +32,25 @@ export default function EcommerceShopPage() {
 
   const { products, checkout } = useSelector((state) => state.product)
 
-  const defaultValues = {
-    gender: [],
-    category: 'All',
-    colors: [],
-    priceRange: [0, 200],
-    rating: '',
-    sortBy: 'featured',
-  };
-
-  const methods = useForm({
-    defaultValues,
-  });
-
-  const {
-    reset,
-    watch,
-    formState: { dirtyFields },
-  } = methods;
-
-  const isDefault =
-    (!dirtyFields.gender &&
-      !dirtyFields.category &&
-      !dirtyFields.colors &&
-      !dirtyFields.priceRange &&
-      !dirtyFields.rating) ||
-    false;
-
-  const values = watch();
+  const { cart } = checkout;
 
   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
 
+  const handleDeleteCart = (productId: string) => {
+    dispatch(deleteCart(productId));
+  };
+
+  const handleIncreaseQuantity = (productId: string) => {
+    dispatch(increaseQuantity(productId));
+  };
+
+  const handleDecreaseQuantity = (productId: string) => {
+    dispatch(decreaseQuantity(productId));
+  };
+
+  console.log(products,checkout);
   return (
     <>
       <Head>
@@ -71,6 +58,20 @@ export default function EcommerceShopPage() {
       </Head>
 
         <Container maxWidth={'lg'}>
+        <Grid
+          container
+          justifyContent={{
+            xs: 'center',
+            md: 'space-between',
+          }}
+          sx={{
+            textAlign: {
+              xs: 'center',
+              md: 'left',
+            },
+          }}
+        >
+          <Grid item xs={12} sx={{ mb: 8 }}>
           <Stack
             spacing={2}
             direction={{ xs: 'column', sm: 'row' }}
@@ -110,7 +111,17 @@ export default function EcommerceShopPage() {
           </Card>
         )
       )}
-    </Box>
+          </Box>
+          </Grid>
+          <Grid item xs={12} sx={{ mb: 4 }}>
+            <CheckoutCart
+            checkout={checkout}
+            onDeleteCart={handleDeleteCart}
+            onIncreaseQuantity={handleIncreaseQuantity}
+            onDecreaseQuantity={handleDecreaseQuantity}
+            />
+            </Grid>
+            </Grid>
           <CartWidget totalItems={checkout.totalItems} />
         </Container>
     </>
