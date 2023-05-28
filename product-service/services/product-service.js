@@ -1,6 +1,6 @@
 const { ProductRepository } = require("../database");
 const { FormateData } = require("../utils");
-const { APIError, BadRequestError } = require('../utils/app-errors')
+const { APIError, BadRequestError } = require("../utils/app-errors");
 
 // All Business logic will be here
 class ProductService {
@@ -9,14 +9,14 @@ class ProductService {
   }
 
   async CreateProduct(userInputs) {
-    const { name, price, description, imageURL, creator } = userInputs;
+    const { name, price, description, imageURI, creator } = userInputs;
 
     try {
       const result = await this.repository.CreateProduct({
         name,
         price,
         description,
-        imageURL,
+        imageURI,
         creator,
       });
 

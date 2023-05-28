@@ -43,7 +43,7 @@ class UserService {
   }
 
   async SignUp(userInputs) {
-    const { email, password, phone } = userInputs;
+    const { email, password, name } = userInputs;
 
     try {
       // create salt
@@ -54,7 +54,7 @@ class UserService {
       const existingUser = await this.repository.CreateUser({
         email,
         password: userPassword,
-        phone,
+        name,
         salt,
       });
 
@@ -72,7 +72,7 @@ class UserService {
   async GetProfile(email) {
     console.log("email", email);
     try {
-      const existingUser = await this.repository.FindUser({ email });
+      const existingUser = await this.repository.FindUser(email);
       return FormateData(existingUser);
     } catch (err) {
       throw new APIError("Data Not found", err);

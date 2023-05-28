@@ -14,13 +14,9 @@ const initialState: IProductState = {
   products: [],
   product: null,
   checkout: {
-    activeStep: 0,
     cart: [],
     subtotal: 0,
     total: 0,
-    discount: 0,
-    shipping: 0,
-    billing: null,
     totalItems: 0,
   },
 };
@@ -59,11 +55,7 @@ const slice = createSlice({
       const totalItems = sum(cart.map((product) => product.quantity));
       const subtotal = sum(cart.map((product) => product.price * product.quantity));
       state.checkout.cart = cart;
-      state.checkout.discount = state.checkout.discount || 0;
-      state.checkout.shipping = state.checkout.shipping || 0;
-      state.checkout.billing = state.checkout.billing || null;
       state.checkout.subtotal = subtotal;
-      state.checkout.total = subtotal - state.checkout.discount;
       state.checkout.totalItems = totalItems;
     },
 
@@ -80,7 +72,6 @@ const slice = createSlice({
           if (isExisted) {
             return {
               ...product,
-              colors: uniq([...product.colors, ...newProduct.colors]),
               quantity: product.quantity + 1,
             };
           }
@@ -100,12 +91,8 @@ const slice = createSlice({
 
     resetCart(state) {
       state.checkout.cart = [];
-      state.checkout.billing = null;
-      state.checkout.activeStep = 0;
       state.checkout.total = 0;
       state.checkout.subtotal = 0;
-      state.checkout.discount = 0;
-      state.checkout.shipping = 0;
       state.checkout.totalItems = 0;
     },
 
@@ -161,8 +148,9 @@ export function getProducts() {
   return async (dispatch: Dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/products');
-      dispatch(slice.actions.getProductsSuccess(response.data.products));
+      const response = await axios.get('/products');
+      console.log("respoonse",response);
+      dispatch(slice.actions.getProductsSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

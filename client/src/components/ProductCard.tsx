@@ -19,7 +19,7 @@ type Props = {
 };
 
 export default function ShopProductCard({ product }: Props) {
-  const { id, name, cover, price, colors, status, available, sizes, priceSale } = product;
+  const { id, name, imageURI, price } = product;
 
   const dispatch = useDispatch();
 
@@ -27,11 +27,7 @@ export default function ShopProductCard({ product }: Props) {
     const newProduct = {
       id,
       name,
-      cover,
-      available,
       price,
-      colors: [colors[0]],
-      size: sizes[0],
       quantity: 1,
     };
     try {
@@ -73,7 +69,7 @@ export default function ShopProductCard({ product }: Props) {
         </Fab> 
 
         <Image
-      src={cover}
+      src={imageURI}
       width={500}
       height={500}
       alt="Picture of the author"
@@ -88,9 +84,9 @@ export default function ShopProductCard({ product }: Props) {
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Stack direction="row" spacing={0.5} sx={{ typography: 'subtitle1' }}>
-            {priceSale && (
+            {price && (
               <Box component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>
-                priceSale
+                price
               </Box>
             )}
 
