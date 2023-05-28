@@ -2,7 +2,7 @@
 import NextLink from 'next/link';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { AppBar, Toolbar, Box, BoxProps, Link } from '@mui/material';
+import { AppBar, Toolbar, Box, BoxProps, Link, Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -25,11 +25,7 @@ export default function Header() {
           }),
         }}
       >
-        
-
-        <Link component={NextLink} href={'#'} variant="subtitle2" color="inherit">
-          Need Help?
-        </Link>
+        <Typography variant='h5'> E-Commerce Shop</Typography>
       </Toolbar>
 
       <Shadow />
